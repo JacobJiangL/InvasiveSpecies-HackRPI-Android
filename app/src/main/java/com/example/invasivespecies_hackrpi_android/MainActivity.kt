@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
                     loadFragment(MapFragment())
                     true
                 }
+
                 R.id.camera_button -> {
                     loadFragment(CameraFragment())
                     true
