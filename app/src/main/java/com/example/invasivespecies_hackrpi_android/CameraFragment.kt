@@ -6,14 +6,13 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.*
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import androidx.core.content.PermissionChecker.checkSelfPermission
+import androidx.fragment.app.Fragment
+import org.pytorch.Module
 
 class CameraFragment : Fragment() {
     private lateinit var captureButton: Button
@@ -33,29 +32,31 @@ class CameraFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        captureButton = view.findViewById(R.id.camera_capture_button)
+//        captureButton = view.findViewById(R.id.camera_capture_button)
         imgView = view.findViewById(R.id.camera_img_view)
 
 
-        captureButton.setOnClickListener() {
-            val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//        captureButton.setOnClickListener() {
+        val captureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-            try {
-                startActivityForResult(captureIntent, REQUEST_IMAGE_CAPTURE)
-            } catch (_: ActivityNotFoundException) {
-
-            }
+        try {
+            startActivityForResult(captureIntent, REQUEST_IMAGE_CAPTURE)
+        } catch (_: ActivityNotFoundException) {
 
         }
+
+//        }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
-            imgView.setImageBitmap(imageBitmap)
 
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
+            imgView.setImageBitmap(imageBitmap)
+            val module: Module = Module.load("/mobile.ptl")
         }
+//        } else {
+//            super.onActivityResult(requestCode, resultCode, data)
+//        }
     }
 
 
