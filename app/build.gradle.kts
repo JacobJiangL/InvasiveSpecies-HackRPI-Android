@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.invasivespecies_hackrpi_android"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.invasivespecies_hackrpi_android"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -25,6 +25,10 @@ android {
                 "proguard-rules.pro"
             )
         }
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     compileOptions {
