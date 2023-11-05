@@ -2,17 +2,33 @@ package com.example.invasivespecies_hackrpi_android
 
 import android.app.Activity.RESULT_OK
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import org.pytorch.Module
+import org.pytorch.IValue
+import org.pytorch.LiteModuleLoader
+import org.pytorch.torchvision.TensorImageUtils
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+
+import kotlin.io.path.Path
+import java.nio.file.Paths
+import kotlin.io.path.absolutePathString
+
 
 class CameraFragment : Fragment() {
     private lateinit var captureButton: Button
@@ -47,18 +63,72 @@ class CameraFragment : Fragment() {
 
 //        }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = data?.extras?.get("data") as Bitmap
 
             imgView.setImageBitmap(imageBitmap)
-            val module: Module = Module.load("/mobile.ptl")
+            var resized_bitmap = Bitmap.createScaledBitmap(imageBitmap, 224, 224, false)
+            var module = LiteModuleLoader.load(assetFilePath(requireActivity().applicationContext!!, "model.ptl"))
+            val inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resized_bitmap,
+                TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
+            val outputTensor = module.forward(IValue.from(inputTensor)).toTensor();
+            val scores = outputTensor.getDataAsFloatArray();
+            // searching for the index with maximum score
+
+            // searching for the index with maximum score
+            var maxScore = -Float.MAX_VALUE
+            var maxScoreIdx = -1
+            for (i in scores.indices) {
+                if (scores[i] > maxScore) {
+                    maxScore = scores[i]
+                    maxScoreIdx = i
+                }
+            }
+
+            Log.d("src", "" + maxScoreIdx)
+            val className: String = ImageNetClasses.CLASSES[maxScoreIdx]
+
+            // showing className on UI
+
+            // showing className on UI
+//            val textView: TextView = findViewById<TextView>(R.id.text)
+//            textView.text = className
+
+            var a = className
         }
 //        } else {
 //            super.onActivityResult(requestCode, resultCode, data)
 //        }
     }
 
+    fun assetFilePath(context: Context, asset: String): String {
+        val file = File(context.filesDir, asset)
 
+        try {
+            val inpStream: InputStream = context.assets.open(asset)
+            try {
+                val outStream = FileOutputStream(file, false)
+                val buffer = ByteArray(4 * 1024)
+                var read: Int
+
+                while (true) {
+                    read = inpStream.read(buffer)
+                    if (read == -1) {
+                        break
+                    }
+                    outStream.write(buffer, 0, read)
+                }
+                outStream.flush()
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+            return file.absolutePath
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return ""
+    }
 
 }
