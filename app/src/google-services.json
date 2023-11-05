@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "588752205016",
+    "project_id": "hackrpi-404203",
+    "storage_bucket": "hackrpi-404203.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588752205016:android:fb7906df7cc3e1c21e53ad",
+        "android_client_info": {
+          "package_name": "com.example.invasivespecies_hackrpi_android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhZ7Ag9Mu0kcO2NOrJi2SXrab6LefUnWA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
