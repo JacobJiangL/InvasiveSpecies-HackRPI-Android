@@ -6,9 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".CameraFragment">
 
+    <ImageView
+        android:id="@+id/camera_img_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/capture_icon_vector" />
+
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_width="match_parent"
+        android:layout_height="276dp"
+        android:padding="5dp"
+        android:text="Oops! This page is not intended for viewing. Press any nav button to return to your regularly scheduled features."
+        android:textSize="30sp" />
+
+
 </FrameLayout>

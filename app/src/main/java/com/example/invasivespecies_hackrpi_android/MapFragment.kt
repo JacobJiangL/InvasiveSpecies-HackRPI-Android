@@ -2,6 +2,7 @@ package com.example.invasivespecies_hackrpi_android
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,10 +49,11 @@ class MapFragment : Fragment()  {
             val collection = db.collection("hackrpi-csv-1")
             collection.get().addOnSuccessListener { result ->
                 for (document in result) {
-                    val coords = LatLng(document.getDouble("x")!!, document.getDouble("y")!!)
+                    val lat = document.getDouble("y")
+                    val long = document.getDouble("x")
                     val circleOptions = CircleOptions()
-                        .center(coords)
-                        .radius(50000.0)
+                        .center(LatLng(lat!!, long!!))
+                        .radius(5000.0)
                         .strokeColor(Color.RED)
                         .fillColor(Color.RED)
 
