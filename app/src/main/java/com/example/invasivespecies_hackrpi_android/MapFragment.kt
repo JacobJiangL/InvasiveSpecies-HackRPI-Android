@@ -8,8 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -51,13 +54,26 @@ class MapFragment : Fragment()  {
                 for (document in result) {
                     val lat = document.getDouble("y")
                     val long = document.getDouble("x")
+                    val speciesName = document.getString("common_name")
+                    val scientificName = document.getString("scientific_name")
+
                     val circleOptions = CircleOptions()
                         .center(LatLng(lat!!, long!!))
                         .radius(5000.0)
                         .strokeColor(Color.RED)
                         .fillColor(Color.RED)
 
-                    googleMap.addCircle(circleOptions)
+                    val circle = googleMap.addCircle(circleOptions)
+                    val infoWindowOptions = MarkerOptions()
+                        .position(circle.center)
+                        .title(speciesName)
+                        .snippet(scientificName)
+
+                    val currentMarker = googleMap.addMarker(infoWindowOptions)
+                    circle.isClickable = true
+                    googleMap.setOnCircleClickListener {
+                        currentMarker?.showInfoWindow()
+                    }
                 }
             }
         }
