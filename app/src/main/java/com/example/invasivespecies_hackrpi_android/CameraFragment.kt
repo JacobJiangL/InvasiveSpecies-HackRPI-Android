@@ -33,8 +33,8 @@ class CameraFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        captureButton = view.findViewById(R.id.camera_capture_button)
-        imgView = view.findViewById(R.id.camera_img_view)
+//        captureButton = view.findViewById(R.id.camera_capture_button)
+//        imgView = view.findViewById(R.id.camera_img_view)
 
 
         captureButton.setOnClickListener() {

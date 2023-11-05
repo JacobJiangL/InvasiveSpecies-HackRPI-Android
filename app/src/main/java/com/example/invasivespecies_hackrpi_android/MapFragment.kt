@@ -1,12 +1,13 @@
 package com.example.invasivespecies_hackrpi_android
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -21,7 +22,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [MapFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MapFragment : Fragment() {
+class MapFragment : Fragment()  {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -35,13 +36,33 @@ class MapFragment : Fragment() {
         }
     }
 
-    override fun onCreateView (
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map, container, false)
+        val view = inflater.inflate(R.layout.fragment_map, container, false)
+        val supportMapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+
+        supportMapFragment.getMapAsync { googleMap ->
+            val db = FirebaseFirestore.getInstance()
+            val collection = db.collection("hackrpi-csv-1")
+            collection.get().addOnSuccessListener { result ->
+                for (document in result) {
+                    val coords = LatLng(document.getDouble("x")!!, document.getDouble("y")!!)
+                    val circleOptions = CircleOptions()
+                        .center(coords)
+                        .radius(50000.0)
+                        .strokeColor(Color.RED)
+                        .fillColor(Color.RED)
+
+                    googleMap.addCircle(circleOptions)
+                }
+            }
+        }
+
+        return view
     }
+
 
     companion object {
         /**

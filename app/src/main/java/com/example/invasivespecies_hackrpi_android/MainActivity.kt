@@ -13,7 +13,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loadFragment(MapFragment())
-
         binding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.map_button -> {
