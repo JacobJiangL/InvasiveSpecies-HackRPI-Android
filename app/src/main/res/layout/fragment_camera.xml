@@ -9,16 +9,18 @@
     <ImageView
         android:id="@+id/camera_img_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/capture_icon_vector" />
+        android:layout_height="wrap_content"
+        android:src="@drawable/capture_icon_vector"
+        android:translationY="630dp" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewResults"
         android:layout_width="match_parent"
-        android:layout_height="276dp"
+        android:layout_height="431dp"
         android:padding="5dp"
         android:text="Oops! This page is not intended for viewing. Press any nav button to return to your regularly scheduled features."
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:translationY="30dp" />
 
 
 </FrameLayout>

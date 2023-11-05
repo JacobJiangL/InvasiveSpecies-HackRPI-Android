@@ -31,6 +31,7 @@ import kotlin.io.path.absolutePathString
 
 
 class CameraFragment : Fragment() {
+    private lateinit var view: View
     private lateinit var captureButton: Button
     private lateinit var imgView: ImageView
     val REQUEST_IMAGE_CAPTURE = 100
@@ -48,6 +49,7 @@ class CameraFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        this.view = view
 //        captureButton = view.findViewById(R.id.camera_capture_button)
         imgView = view.findViewById(R.id.camera_img_view)
 
@@ -74,29 +76,32 @@ class CameraFragment : Fragment() {
             val inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resized_bitmap,
                 TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
             val outputTensor = module.forward(IValue.from(inputTensor)).toTensor();
-            val scores = outputTensor.getDataAsFloatArray();
+            val scores = outputTensor.dataAsFloatArray.toTypedArray();
             // searching for the index with maximum score
 
             // searching for the index with maximum score
             var maxScore = -Float.MAX_VALUE
             var maxScoreIdx = -1
-            for (i in scores.indices) {
-                if (scores[i] > maxScore) {
-                    maxScore = scores[i]
-                    maxScoreIdx = i
-                }
+
+            val sortedScores = scores.sorted()
+            var rankedString: String = ""
+            for (i in 1 until 6) {
+                rankedString += "#" + i + " : " + ImageNetClasses.CLASSES[scores.indexOf(sortedScores[i-1])] + " : " + ((sortedScores[i-1] * -100).toInt()) + "%\n"
+//                if (scores[i] > maxScore) {
+//                    maxScore = scores[i]
+//                    maxScoreIdx = i
+//                }
             }
 
-            Log.d("src", "" + maxScoreIdx)
-            val className: String = ImageNetClasses.CLASSES[maxScoreIdx]
+//            Log.d("src", "" + maxScoreIdx)
+//            val className: String = ImageNetClasses.CLASSES[maxScoreIdx]
 
             // showing className on UI
 
             // showing className on UI
-//            val textView: TextView = findViewById<TextView>(R.id.text)
-//            textView.text = className
+            val textView: TextView = this.view.findViewById(R.id.textViewResults)
+            textView.text = ("Predictions:\n\n" + rankedString)
 
-            var a = className
         }
 //        } else {
 //            super.onActivityResult(requestCode, resultCode, data)
