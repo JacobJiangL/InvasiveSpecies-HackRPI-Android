@@ -9,4 +9,4 @@
     map:cameraZoom="6"
     map:cameraTargetLat="42.72993615286854"
     map:cameraTargetLng="-75.67895277667057"
-    tools:context=".MapsActivity" />
+    tools:context=".MapFragment" />
