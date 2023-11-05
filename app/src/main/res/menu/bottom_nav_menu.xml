@@ -5,7 +5,7 @@
         android:id="@+id/map_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/map_button_icon_vector"
+        android:icon="@drawable/map_icon_vector"
         android:title="Map" />
 
 
@@ -13,7 +13,7 @@
     <item
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@drawable/camera_button_icon_vector"
+        android:icon="@drawable/camera_icon_vector"
         android:title="Camera"
         android:id="@+id/camera_button" />
 
